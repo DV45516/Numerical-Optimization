@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 
 # use pandas to read the data
@@ -138,8 +139,6 @@ np.savetxt("coeffs_qr_loop.csv" , coeffs_qr_loop, delimiter = ",")
 
 #A = VDV^T
 
-# Take SVD and commit to repo
-
 # now use the SVD to solve the linear model
 U, S, VT = np.linalg.svd(X, full_matrices = False)
 
@@ -148,3 +147,62 @@ np.savetxt("U.csv" , U , delimiter = ",")
 np.savetxt("S.csv" , S , delimiter = ",")
 np.savetxt("VT.csv" , VT , delimiter = ",")
 
+
+
+# date : 21/1/2025
+# lec 3
+
+# write X as a product of U, S, VT
+X_reconstructed = U @ np.diag(S) @ VT
+
+# solve for X_reconstructed @ coefs = y
+
+coefs_svd = VT.T @ np.diag(1/S) @ U.T @ y
+
+coeffs_svd_pinv = np.linalg.pinv(X) @ y
+
+#save coefs_svd to a file named coefs_svd.csv
+np.savetxt("coefs_svd.csv" , coefs_svd , delimiter = ",")
+#save coefs_svd_pinv to a file named coefs_svd_pinv.csv
+np.savetxt("coefs_svd_pinv.csv" , coeffs_svd_pinv , delimiter = ",")
+
+X_1 = X[:,0:1]
+
+coeffs_1 = np.linalg.inv(X_1.T @ X_1) @ X_1.T @ y
+
+# plot the data on X[:,1] vs y axis
+# also plot the regression line with only X[:,0] and X[:,1] as features
+# first make X[:,1] as np.arrange between min and max of X[:,1]
+# then calculate the predictions using the coefficients
+X_feature = np.arange(np.min(X[:,1]) , np.max(X[:,1]) , 0.01)
+plt.scatter(X[:,1] , y)
+plt.plot(X_feature , X_feature * coeffs_1 , color = "red")
+plt.xlabel("Square Feet")
+plt.ylabel("Price")
+plt.title("Price vs Square Feet")
+plt.savefig("price_vs_square_feet.png") 
+
+
+# Now, use X as only square feet to build a linear model to predict prices
+X = df["Square_Feet"].values
+y = df["Price"].values
+
+# add a column of 1s to X
+X = np.hstack((np.ones((n_samples,1)),X.reshape(-1,1)))
+
+coeffs_1 = np.linalg.inv(X.T @ X) @ X.T @ y
+np.savetxt("coeffs_1.csv" , coeffs_1 , delimiter = ",")
+
+predictions_1 = X @ coeffs_1
+
+X_feature = np.arange(np.min(X[:,1]) , np.max(X[:,1]) , 0.01)
+
+# pad X_feature with a column of 1s
+X_feature = np.hstack((np.ones((X_feature.shape[0],1)),X_feature.reshape(-1,1)))
+
+plt.scatter(X[:,1] , y)
+plt.plot(X_feature[:,1] , X_feature @ coeffs_1 , color = "red")
+plt.xlabel("Square Feet")
+plt.ylabel("Price")
+plt.title("Price vs Square Feet")
+plt.savefig("price_vs_square_feet.png")
