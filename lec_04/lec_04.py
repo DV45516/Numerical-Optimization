@@ -10,10 +10,10 @@ x = np.linspace(-10, 10, 100)
 y = f(x)
 
 plt.plot(x, y)
-plt.xlabel('x')
-plt.ylabel('f(x)')
-plt.title('f(x) = 2x^2 + 3x + 4')
-plt.savefig('lec_04_01.png')
+plt.xlabel('$x$')
+plt.ylabel('$f(x)$')
+plt.title('$f(x) = 2x^2 + 3x + 4$')
+plt.savefig('f_x.png')
 plt.close()
 
 # define the derivative of f(x)
@@ -72,20 +72,20 @@ plt.colorbar(cfp)
 # set colour axis limit to [0,10]
 plt.clim(0, 10)
 
-plt.xlabel('x1')
-plt.ylabel('x2')
-plt.title('f(x1, x2) = x1^2 + x2^2 + 0.5*x1*x2')
+plt.xlabel('$x_1$')
+plt.ylabel('$x_2$')
+plt.title('$f(x_1, x_2) = x_1^2 + x_2^2 + \\frac{1}{2} x_1 x_2$')
 plt.savefig('contour.png')
 
 # plot the function in 3D
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 ax.plot_surface(X1, X2, Y)
-ax.set_xlabel('x1')
-ax.set_ylabel('x2')
-ax.set_zlabel('f(x1, x2)')
-plt.title('f(x1, x2) = x1^2 + x2^2 + 0.5*x1*x2')
-plt.savefig('lec_04_02.png')
+ax.set_xlabel('$x_1$')
+ax.set_ylabel('$x_2$')
+ax.set_zlabel('$f(x_1, x_2)$')
+plt.title('$f(x_1, x_2) = x_1^2 + x_2^2 + \\frac{1}{2} x_1 x_2$')
+plt.savefig('3D_plot.png')
 
 
 dir_decsent = -grad_f2(1, 1) # steepeset descent direction
